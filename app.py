@@ -1,17 +1,12 @@
-from flask import Flask, request
-from handlers import process_record, transfer_doc
+from flask import Flask
+from handlers.role_routes import role_bp
 
 app = Flask(__name__)
+app.register_blueprint(role_bp)
 
 @app.route("/")
 def home():
-    return "🟢 Сервер работает."
+    return "🟢 Сервер работает"
 
-@app.route("/process", methods=["GET"])
-def process():
-    record_id = request.args.get("recordId")
-    return process_record.handle(record_id)
-
-@app.route("/transfer", methods=["POST"])
-def transfer():
-    return transfer_doc.handle()
+if __name__ == "__main__":
+    app.run(debug=True)

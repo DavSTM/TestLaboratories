@@ -1,4 +1,6 @@
 import os, requests
+from dotenv import load_dotenv
+load_dotenv()
 
 API_KEY = os.environ.get("AIRTABLE_API_KEY")
 BASE_ID = os.environ.get("AIRTABLE_BASE_ID")
@@ -22,3 +24,7 @@ def update_record(table, record_id, fields):
 def delete_record(table, record_id):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{table}/{record_id}"
     return requests.delete(url, headers=HEADERS).json()
+
+
+print("API_KEY:", os.environ.get("AIRTABLE_API_KEY"))
+print("BASE_ID:", os.environ.get("AIRTABLE_BASE_ID"))
