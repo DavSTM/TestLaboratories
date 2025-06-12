@@ -48,6 +48,6 @@ def orders_acknowledge():
         )
 
     # Удаляем временную запись, в любом случае
-    # delete_record("Журнал распоряжений", temp_id)
+    delete_record("Журнал распоряжений", temp_id)
 
-    return f"✅ Обработка {match} завершена"
+    return f"✅ Обработка завершена"
