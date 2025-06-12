@@ -14,7 +14,7 @@ def acknowledge():
     temp_rec = get_record("Журнал распоряжений", temp_id)
     fields = temp_rec.get("fields", {})
     base_id = fields.get("Переданный ID")
-    user = fields.get("Кто отправил", [{}])[0]
+    user = fields.get("Created By", [{}])[0]
     user_email = user.get("email")
 
     if not base_id or not user_email:
