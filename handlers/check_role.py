@@ -17,7 +17,7 @@ def check_role():
     for rid in role_ids:
         role_record = get_record("Персонал (Роли)", rid)
         code = role_record.get("fields", {}).get("Код роли")
-        sif code:
+        if code:
             role_names.append(code)
 
     if "R.17" in role_names:

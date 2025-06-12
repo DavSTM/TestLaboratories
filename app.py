@@ -1,5 +1,5 @@
 from flask import Flask
-from handlers.role_routes import role_bp
+from handlers.check_role import role_bp
 
 app = Flask(__name__)
 app.register_blueprint(role_bp)
