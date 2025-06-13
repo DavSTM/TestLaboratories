@@ -15,7 +15,7 @@ def check_role():
 
     role_names = []
     for rid in role_ids:
-        role_record = get_record("Персонал (Роли)", rid)
+        role_record = get_record("Персонал - Роли", rid)
         code = role_record.get("fields", {}).get("Код роли")
         if code:
             role_names.append(code)

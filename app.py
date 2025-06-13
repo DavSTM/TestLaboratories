@@ -1,14 +1,16 @@
 from flask import Flask
-from handlers.check_role import role_bp
-from handlers.orders_acknowledge import ack_bp
+from handlers import register_blueprints
+from test import test_bp
 
 app = Flask(__name__)
-app.register_blueprint(role_bp)
-app.register_blueprint(ack_bp)
+register_blueprints(app)
+app.register_blueprint(test_bp)
+
 
 @app.route("/")
 def home():
     return "🟢 Сервер работает"
+
 
 if __name__ == "__main__":
     app.run(debug=True)

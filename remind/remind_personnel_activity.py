@@ -4,7 +4,7 @@ def main():
     personnel = {p["id"]: p for p in get_all_records("Персонал")}
     print(f"📋 Загружено {len(personnel)} сотрудников")
 
-    activity = get_all_records("Персонал (Активность)")
+    activity = get_all_records("Персонал - Активность")
     print(f"📑 Обрабатывается {len(activity)} записей активности")
 
     total_sent = 0
