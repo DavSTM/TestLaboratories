@@ -14,10 +14,10 @@ def document_create():
 
     temp_rec = get_record("Документы", temp_id)
     has_permission = check_role(temp_id, "Документы", ['R.17'])
-    print('jopa')
 
     if has_permission:
         fields = {
+            "Лаборатория": temp_rec.get("fields", {}).get("Лаборатория"),
             "ID документа": [temp_rec.get("id", '')],
             "Дата": temp_rec.get("fields", {}).get("Дата введения"),
             "Вид активности": "Актуализация",
