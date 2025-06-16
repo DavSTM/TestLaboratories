@@ -1,28 +1,22 @@
 from flask import Blueprint, request, Response
-from airtable_client import get_record, create_record, delete_record, check_role, update_record
+from airtable_client import get_record, create_record, delete_record, update_record
+from handlers.functions import get_records_by_transfer_id, check_role
 
 doc_update_bp = Blueprint("doc_update", __name__)
 
 
 @doc_update_bp.route("/document_update", methods=["POST"])
 def document_update():
-    data = request.json
-    temp_id = data.get("recordId")  # ID записи, только что добавленной формой
+    """
+    Обновление документов
+    """
+    (temp_record_id, temp_record, temp_fields,
+     base_record_id, base_record, base_fields,
+     user_email) = get_records_by_transfer_id(
+        "_Документы", "Документы")
 
-    if not temp_id:
-        return Response("❌ Нет recordId", status=400)
-
-    temp_rec = get_record("_Документы", temp_id)
-    temp_fields = temp_rec.get("fields", {})
-
-    doc_refs = temp_fields.get("_Document") or []
-    if not doc_refs:
-        return Response("❌ Нет ссылки на Документы", status=400)
-    base_rec = get_record("Документы", doc_refs[0])
-    base_fields = base_rec.get("fields", {}) if base_rec else {}
-
-    has_permission_02 = check_role(temp_rec, ['R.02'])
-    has_permission_17 = check_role(temp_rec, ['R.17'])
+    has_permission_02 = check_role(temp_record, ['R.02'])
+    has_permission_17 = check_role(temp_record, ['R.17'])
     del_file = temp_fields.get("Удалить файлы")
     del_record = temp_fields.get("Delete")
 
@@ -33,7 +27,7 @@ def document_update():
             fields = {
                 "Status": "Deleted"
             }
-            update_record("Документы", base_rec.get("id"), fields)
+            update_record("Документы", base_record.get("id"), fields)
             return Response("Запись в Документы удалена", status=200)
 
         fields = {
@@ -76,28 +70,8 @@ def document_update():
 
             fields["Файлы"] = existing_files + new_files
 
-        update_record("Документы", doc_refs[0], fields)
+        update_record("Документы", base_record, fields)
         return Response("✅ Запись обновлена", status=200)
     else:
-        delete_record("_Документы", temp_id)
+        delete_record("_Документы", temp_record)
         return Response("❌ Нет прав — запись удалена", status=403)
-
-
-def prepare_files_field(base_fields, temp_fields, del_file=False):
-    if del_file:
-        return []
-
-    # Получаем текущие файлы (из основной записи)
-    existing_files = base_fields.get("Файлы") or []
-
-    # Получаем новые файлы (из временной записи)
-    new_files_raw = temp_fields.get("Файлы") or []
-
-    # Очищаем только нужные поля: url + filename
-    new_files = [
-        {"url": f.get("url"), "filename": f.get("filename")}
-        for f in new_files_raw
-        if isinstance(f, dict) and f.get("url")
-    ]
-
-    return existing_files + new_files

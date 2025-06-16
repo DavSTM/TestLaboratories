@@ -1,6 +1,6 @@
 import os, requests
 from dotenv import load_dotenv
-from flask import jsonify
+from flask import jsonify, request, Response
 
 load_dotenv()
 
@@ -46,31 +46,3 @@ def update_record(table, record_id, fields):
 def delete_record(table, record_id):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{table}/{record_id}"
     return requests.delete(url, headers=HEADERS).json()
-
-
-def check_role(record, roles):
-    result = False
-
-    created_by = record.get("fields", {}).get("Created By")
-    laboratory = record.get("fields", {}).get("Лаборатория")
-
-    personnel = get_all_records("Персонал")
-
-    role_ids = []
-    for person in personnel:
-        if (created_by["email"] == person.get("fields", {}).get("Электронная почта")
-                and laboratory == person.get("fields", {}).get("Лаборатория")):
-            role_ids = person.get("fields", {}).get("Коды ролей")
-            break
-
-    role_names = []
-    for rid in role_ids:
-        role_record = get_record("Персонал (Роли)", rid)
-        code = role_record.get("fields", {}).get("Код роли")
-        if code:
-            role_names.append(code)
-
-    if any(role in role_names for role in roles):
-        result = True
-
-    return jsonify({"result": result})
