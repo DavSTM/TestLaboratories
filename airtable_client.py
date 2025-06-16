@@ -48,9 +48,8 @@ def delete_record(table, record_id):
     return requests.delete(url, headers=HEADERS).json()
 
 
-def check_role(record_id, table, roles):
+def check_role(record, roles):
     result = False
-    record = get_record(table, record_id)
 
     created_by = record.get("fields", {}).get("Created By")
     laboratory = record.get("fields", {}).get("Лаборатория")

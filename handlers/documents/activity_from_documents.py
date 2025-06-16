@@ -5,7 +5,7 @@ doc_create_bp = Blueprint("doc_create", __name__)
 
 
 @doc_create_bp.route("/document_create", methods=["POST"])
-def document_create():
+def activity_from_documents():
     data = request.json
     temp_id = data.get("recordId")  # ID записи, только что добавленной формой
 
@@ -13,15 +13,18 @@ def document_create():
         return Response("❌ Нет recordId", status=400)
 
     temp_rec = get_record("Документы", temp_id)
-    has_permission = check_role(temp_id, "Документы", ['R.17'])
+    temp_fields = temp_rec.get("fields", {})
+    has_permission = check_role(temp_rec, ['R.02', 'R.17'])
 
-    if has_permission:
+    if has_permission and temp_fields.get("Статус") == "Актуальный":
         fields = {
-            "Лаборатория": temp_rec.get("fields", {}).get("Лаборатория"),
+            "Лаборатория": temp_fields.get("Лаборатория"),
             "ID документа": [temp_rec.get("id", '')],
-            "Дата": temp_rec.get("fields", {}).get("Дата введения"),
+            "Дата": temp_fields.get("Дата введения"),
             "Вид активности": "Актуализация",
+            "Auto": True
         }
+
         create_record("Документы - Активность", fields)
         return Response("✅ Запись создана", status=200)
     else:
