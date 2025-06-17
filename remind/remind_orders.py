@@ -1,4 +1,5 @@
-from remind_base import get_all_records, send_telegram, extract_user_id
+from airtable_client import get_all_records
+from remind.remind_base import send_telegram, extract_user_id
 
 def main():
     # Кэшируем сотрудников
@@ -14,9 +15,9 @@ def main():
         fields = entry.get("fields", {})
         record_number = fields.get("ID")  # Номер распоряжения
 
-        performers = fields.get("Исполнители", [])              # list of record_ids
-        issuer_id = fields.get("Распоряжение выдал")            # single record_id
-        signed_users = fields.get("Ознакомлены", [])                # list of User-objects
+        performers = fields.get("Исполнители - ID", [])              # list of record_ids
+        issuer_id = fields.get("Распоряжение выдал - ID", [])
+        signed_users = fields.get("Ознакомлены - Подписи", [])                # list of User-objects
 
         # Преобразуем подписавшихся в set user_id
         signed_user_ids = {
@@ -26,8 +27,7 @@ def main():
         # Формируем список сотрудников, которым нужно отправить напоминание
         pending_person_ids = set(performers)
         if issuer_id:
-            pending_person_ids.add(issuer_id)
-
+            pending_person_ids.add(issuer_id[0])
         for person_id in pending_person_ids:
             person = personnel.get(person_id)
             if not person:

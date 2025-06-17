@@ -13,21 +13,6 @@ HEADERS = {
     "Content-Type": "application/json"
 }
 
-def get_all_records(table):
-    url = f"https://api.airtable.com/v0/{BASE_ID}/{table}"
-    records = []
-    offset = None
-
-    while True:
-        params = {"offset": offset} if offset else {}
-        response = requests.get(url, headers=HEADERS, params=params)
-        data = response.json()
-        records.extend(data.get("records", []))
-        offset = data.get("offset")
-        if not offset:
-            break
-    return records
-
 def send_telegram(chat_id, message):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {"chat_id": chat_id, "text": message}
