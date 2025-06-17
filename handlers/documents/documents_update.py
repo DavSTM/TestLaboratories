@@ -8,12 +8,12 @@ doc_update_bp = Blueprint("doc_update", __name__)
 @doc_update_bp.route("/document_update", methods=["POST"])
 def document_update():
     """
-    Обновление документов
+    Обновление документов из _Документы - Перечень в Документы - Перечень
     """
     (temp_record_id, temp_record, temp_fields,
      base_record_id, base_record, base_fields,
      user_email) = get_records_by_transfer_id(
-        "_Документы", "Документы")
+        "_Документы - Перечень", "Документы - Перечень")
 
     has_permission_02 = check_role(temp_record, ['R.02'])
     has_permission_17 = check_role(temp_record, ['R.17'])
@@ -27,8 +27,8 @@ def document_update():
             fields = {
                 "Status": "Deleted"
             }
-            update_record("Документы", base_record.get("id"), fields)
-            return Response("Запись в Документы удалена", status=200)
+            update_record("Документы - Перечень", base_record.get("id"), fields)
+            return Response("Запись в Документы - Перечень удалена", status=200)
 
         fields = {
             "Лаборатория": temp_fields.get("Лаборатория"),
@@ -59,19 +59,19 @@ def document_update():
 
         if del_file:
             fields["Файлы"] = []
-        else:
-            existing_files = base_fields.get("Файлы") or []
-            new_files_raw = temp_fields.get("Файлы") or []
-            new_files = [
-                {"url": f.get("url"), "filename": f.get("filename")}
-                for f in new_files_raw
-                if isinstance(f, dict) and f.get("url")
-            ]
 
-            fields["Файлы"] = existing_files + new_files
+        existing_files = base_fields.get("Файлы") or []
+        new_files_raw = temp_fields.get("Файлы") or []
+        new_files = [
+            {"url": f.get("url"), "filename": f.get("filename")}
+            for f in new_files_raw
+            if isinstance(f, dict) and f.get("url")
+        ]
 
-        update_record("Документы", base_record, fields)
+        fields["Файлы"] = existing_files + new_files
+
+        update_record("Документы - Перечень", base_record, fields)
         return Response("✅ Запись обновлена", status=200)
     else:
-        delete_record("_Документы", temp_record)
+        delete_record("_Документы - Перечень", temp_record)
         return Response("❌ Нет прав — запись удалена", status=403)

@@ -10,7 +10,7 @@ def check_role(record, roles):
     created_by = record.get("fields", {}).get("Created By")
     laboratory = record.get("fields", {}).get("Лаборатория")
 
-    personnel = get_all_records("Персонал")
+    personnel = get_all_records("Персонал - Перечень")
 
     role_ids = []
     for person in personnel:
@@ -22,7 +22,7 @@ def check_role(record, roles):
 
     role_names = []
     for rid in role_ids:
-        role_record = get_record("Персонал (Роли)", rid)
+        role_record = get_record("Персонал - Роли", rid)
         code = role_record.get("fields", {}).get("Код роли")
         if code:
             role_names.append(code)
@@ -100,7 +100,7 @@ def person_confirm(
     user_name = None
     # Проверяем искомых
     for person_id in ack_user_rec:
-        person = get_record("Персонал", person_id)
+        person = get_record("Персонал - Перечень", person_id)
         if not person:
             continue
         person_fields = person.get("fields", {})

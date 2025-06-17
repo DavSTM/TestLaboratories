@@ -3,7 +3,10 @@ from remind.remind_base import send_telegram, extract_user_id
 
 
 def main():
-    personnel = {p["id"]: p for p in get_all_records("Персонал")}
+    """
+    Напоминание о Журнале распоряжений
+    """
+    personnel = {p["id"]: p for p in get_all_records("Персонал - Перечень")}
     print(f"📋 Загружено {len(personnel)} сотрудников")
 
     journal = get_all_records("Журнал распоряжений")

@@ -10,8 +10,7 @@ doc_acknowledgement_ack_bp = Blueprint("document_acknowledgement_ack", __name__)
 @doc_acknowledgement_ack_bp.route("/document_acknowledgement_acknowledge", methods=["POST"])
 def document_change_agreed():
     """
-    Ознакомление с документами
-    :return:
+    Ознакомление с документами в Документы - Ознакомление
     """
     (temp_record_id, temp_record, temp_fields,
      base_record_id, base_record, base_fields,

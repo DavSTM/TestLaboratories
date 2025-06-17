@@ -7,6 +7,9 @@ doc_act_bp = Blueprint("doc_activity", __name__)
 
 @doc_act_bp.route("/document_activity", methods=["POST"])
 def document_activity():
+    """
+    Изменение статуса в Документы - Перечень в зависимости от действия в Документы - Активность
+    """
     (temp_record_id, temp_record, temp_fields,
      base_record_id, base_record, base_fields,
      user_email) = get_records_by_transfer_id("Документы - Активность", booSame=True)
@@ -29,7 +32,7 @@ def document_activity():
         }
 
         for doc in base_record_id:
-            update_record("Документы", doc, fields)
+            update_record("Документы - Перечень", doc, fields)
         return Response("✅ Запись обновлена", status=200)
     else:
         return Response("❌ Нет прав", status=403)

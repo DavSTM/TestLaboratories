@@ -3,10 +3,13 @@ from remind.remind_base import send_telegram, extract_user_id
 
 
 def main():
-    personnel = {p["id"]: p for p in get_all_records("Персонал")}
+    """
+    Напоминание в Документы - Ознакомление
+    """
+    personnel = {p["id"]: p for p in get_all_records("Персонал - Перечень")}
     print(f"📋 Загружено {len(personnel)} сотрудников")
 
-    records = get_all_records("Документы - Введение и изменения")
+    records = get_all_records("Документы - Ознакомление")
     print(f"📑 Обрабатывается {len(records)} записей")
 
     total_sent = 0
@@ -21,7 +24,6 @@ def main():
         signed_user_ids = {
             u.get("id") for u in signed_users if isinstance(u, dict) and "id" in u
         }
-
         for person_id in to_ack_ids:
             person = personnel.get(person_id)
             if not person:

@@ -1,7 +1,11 @@
 from remind_base import get_all_records, send_telegram, extract_user_id
 
 def main():
-    personnel = {p["id"]: p for p in get_all_records("Персонал")}
+    """
+    Напоминание в Персонал - Активность
+    :return:
+    """
+    personnel = {p["id"]: p for p in get_all_records("Персонал - Перечень")}
     print(f"📋 Загружено {len(personnel)} сотрудников")
 
     activity = get_all_records("Персонал - Активность")
@@ -14,7 +18,7 @@ def main():
         activity_id = fields.get("ID")
 
         # Списки record_id из "Персонал"
-        whom_ids = fields.get("Персонал ID", [])
+        whom_ids = fields.get("Персонал - ID", [])
         bywhom_ids = fields.get("Кем проведено ID", [])
 
         # Подписавшиеся — user.id
@@ -42,7 +46,7 @@ def main():
                 if user_id and user_id not in signed:
                     tg_id = person.get("fields", {}).get("Telegram ID")
                     if tg_id:
-                        msg = (f"🖊 Пожалуйста, подпишитесь в {label} в журнале Персонал (Активность) №{activity_id}")
+                        msg = (f"🖊 Пожалуйста, подпишитесь в {label} в журнале Персонал - Активность №{activity_id}")
                         code = send_telegram(tg_id, msg)
                         if code == 200:
                             print(f"✅ {tg_id}: отправлено")

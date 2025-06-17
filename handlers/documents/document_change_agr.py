@@ -10,7 +10,7 @@ doc_change_agr_bp = Blueprint("document_change_agr", __name__)
 @doc_change_agr_bp.route("/document_change_agreed", methods=["POST"])
 def document_change_agreed():
     """
-    Согласование введенных или измененных документов
+    Согласование введенных или измененных документов в Документы - Введение и изменения
     """
     (temp_record_id, temp_record, temp_fields,
      base_record_id, base_record, base_fields,

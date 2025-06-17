@@ -8,7 +8,7 @@ doc_create_bp = Blueprint("doc_create", __name__)
 @doc_create_bp.route("/document_create", methods=["POST"])
 def activity_from_documents():
     """
-    При добавлении нового документа в Документы, если статус "Актуальный",
+    При добавлении нового документа в Документы - Перечень, если статус "Актуальный",
     то добавляется запись в Документы - Активность
     :return:
     """
@@ -18,7 +18,7 @@ def activity_from_documents():
     if not temp_id:
         return Response("❌ Нет recordId", status=400)
 
-    base_rec = get_record("Документы", temp_id)
+    base_rec = get_record("Документы - Перечень", temp_id)
     base_fields = base_rec.get("fields", {})
     has_permission = check_role(base_rec, ['R.02', 'R.17'])
 
@@ -28,11 +28,12 @@ def activity_from_documents():
             "ID документа": [base_fields.get("id", '')],
             "Дата": base_fields.get("Дата введения"),
             "Вид активности": "Актуализация",
-            "Auto": True
+            "Auto": True # Не дает сработать триггеру на установку
+                         # др. статусов в Документы - Активность
         }
 
         create_record("Документы - Активность", fields)
         return Response("✅ Запись создана", status=200)
     else:
-        delete_record("Документы", temp_id)
+        delete_record("Документы - Перечень", temp_id)
         return Response("❌ Нет прав — запись удалена", status=403)
