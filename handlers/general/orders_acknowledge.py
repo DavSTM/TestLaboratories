@@ -11,11 +11,12 @@ def orders_acknowledge():
      base_record_id, base_record, base_fields,
      user_email) = get_records_by_transfer_id("Журнал распоряжений", booSame=True)
 
-    person_confirm("Журнал распоряжений", base_record_id, base_record,
+
+    person_confirm("Журнал распоряжений", temp_record_id, base_record_id, base_record,
                    "Исполнители - ID", "Ознакомлены - Подписи",
                    "Ознакомлены - Дата", user_email, booSame=True)
 
-    person_confirm("Журнал распоряжений", base_record_id, base_record,
+    person_confirm("Журнал распоряжений", temp_record_id, base_record_id, base_record,
                    "Распоряжение выдал - ID", "Утверждаю - Подпись",
                    "Утверждаю - Дата", user_email, booSame=True)
     return "✅ Обработка завершена"

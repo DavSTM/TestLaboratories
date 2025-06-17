@@ -14,8 +14,9 @@ def check_role(record, roles):
 
     role_ids = []
     for person in personnel:
-        if (created_by["email"] == person.get("fields", {}).get("Электронная почта")
-                and laboratory == person.get("fields", {}).get("Лаборатория")):
+        if created_by["email"] == person.get("fields", {}).get(
+            "Электронная почта"
+        ) and laboratory == person.get("fields", {}).get("Лаборатория"):
             role_ids = person.get("fields", {}).get("Коды ролей")
             break
 
@@ -43,7 +44,6 @@ def get_records_by_transfer_id(temp_table, base_table=None, booSame=False):
         return Response(f"❌ Временная запись {temp_record_id} не найдена", status=404)
 
     temp_fields = temp_record.get("fields", {})
-
     base_record_id = temp_fields.get("Переданный ID")
     if not base_record_id:
         return Response("❌ Отсутствует 'Переданный ID'", status=400)
@@ -66,22 +66,38 @@ def get_records_by_transfer_id(temp_table, base_table=None, booSame=False):
     if not user_email:
         return Response("❌ Не указан email пользователя", status=400)
 
-    return temp_record_id, temp_record, temp_fields, base_record_id, base_record, base_fields, user_email
+    return (
+        temp_record_id,
+        temp_record,
+        temp_fields,
+        base_record_id,
+        base_record,
+        base_fields,
+        user_email,
+    )
 
 
-def person_confirm(table, base_record_id, base_record, personnel_id, personnel_signs,
-                   personnel_signs_dates, created_by_user_email, booSame=False):
+def person_confirm(
+    table,
+    temp_record_id,
+    base_record_id,
+    base_record,
+    personnel_id,
+    personnel_signs,
+    personnel_signs_dates,
+    created_by_user_email,
+    booSame=False,
+):
 
     base_fields = base_record.get("fields", {})
     ack_user_rec = base_fields.get(personnel_id, [])
     ack_users = base_fields.get(personnel_signs, [])
-    ack_users_dates = base_fields.get(personnel_signs_dates, '')
+    ack_users_dates = base_fields.get(personnel_signs_dates, "")
     today_str = date.today().strftime("%d.%m.%Y")
 
     updated_fields = {}
     user_obj = None
     user_name = None
-
     # Проверяем искомых
     for person_id in ack_user_rec:
         person = get_record("Персонал", person_id)
@@ -100,18 +116,15 @@ def person_confirm(table, base_record_id, base_record, personnel_id, personnel_s
         if user_id and user_id not in ack_users_ids:
             ack_users.append(user_obj)
             updated_fields[personnel_signs] = ack_users
-            updated_fields[personnel_signs_dates] = ack_users_dates + f"{user_name} - {today_str}\n"
-
+            updated_fields[personnel_signs_dates] = (
+                ack_users_dates + f"{user_name} - {today_str}\n"
+            )
     # Обновление записи
     if updated_fields:
-        update_record(
-            table=table,
-            record_id=base_record_id,
-            fields=updated_fields
-        )
+        update_record(table=table, record_id=base_record_id, fields=updated_fields)
 
-    # if booSame:
-    #     # Удаление временной записи
-    #     delete_record(table, temp_record_id)
+    if booSame:
+        # Удаление временной записи
+        delete_record(table, temp_record_id)
 
     return "✅ Обработка завершена"
