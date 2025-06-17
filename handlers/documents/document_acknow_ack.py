@@ -17,8 +17,8 @@ def document_change_agreed():
      base_record_id, base_record, base_fields,
      user_email) = get_records_by_transfer_id("Документы - Ознакомление", booSame=True)
 
-    person_confirm("Документы - Ознакомление", base_record_id, base_record,
-                   "Ознакомлены ID", "Ознакомлены - Подписи",
+    person_confirm("Документы - Ознакомление", temp_record_id, base_record_id, base_record,
+                   "Ознакомлены - ID", "Ознакомлены - Подписи",
                    "Ознакомлены - Дата", user_email, booSame=True)
 
     return "✅ Обработка завершена"
