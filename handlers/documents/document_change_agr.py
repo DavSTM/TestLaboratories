@@ -16,11 +16,11 @@ def document_change_agreed():
      base_record_id, base_record, base_fields,
      user_email) = get_records_by_transfer_id("Документы - Введение и изменения", booSame=True)
 
-    person_confirm("Документы - Введение и изменения", base_record_id, base_record,
+    person_confirm("Документы - Введение и изменения", temp_record_id, base_record_id, base_record,
                    "Согласовано ID", "Согласовано - Подписи",
                    "Согласовано - Дата", user_email, booSame=True)
 
-    person_confirm("Документы - Введение и изменения", base_record_id, base_record,
+    person_confirm("Документы - Введение и изменения", temp_record_id, base_record_id, base_record,
                    "Утверждаю ID", "Утверждаю - Подпись", "Утверждаю - Дата",
                    user_email, booSame=True)
 
