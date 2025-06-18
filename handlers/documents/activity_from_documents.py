@@ -20,20 +20,24 @@ def activity_from_documents():
 
     base_rec = get_record("Документы - Перечень", temp_id)
     base_fields = base_rec.get("fields", {})
-    has_permission = check_role(base_rec, ['R.02', 'R.17'])
+    has_permission = check_role(base_rec, ["R.02", "R.17"])
 
     if has_permission and base_fields.get("Статус") == "Актуальный":
         fields = {
             "Лаборатория": base_fields.get("Лаборатория"),
-            "ID документа": [base_fields.get("id", '')],
-            "Дата": base_fields.get("Дата введения"),
+            "ID документа": [base_fields.get("id", "")],
+            "Дата": base_fields.get("Дата регистрации"),
             "Вид активности": "Актуализация",
-            "Auto": True # Не дает сработать триггеру на установку
-                         # др. статусов в Документы - Активность
+            "Auto": True,  # Не дает сработать триггеру на установку
+            # др. статусов в Документы - Активность
         }
 
         create_record("Документы - Активность", fields)
-        return Response("✅ Запись создана", status=200)
+
+        fields["Вид активности"] = "Введение"
+        create_record("Документы - Активность", fields)
+
+        return Response("✅ Записи созданы", status=200)
     else:
         delete_record("Документы - Перечень", temp_id)
         return Response("❌ Нет прав — запись удалена", status=403)

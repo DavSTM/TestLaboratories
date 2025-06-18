@@ -50,7 +50,8 @@ def main():
             if user_id in signed_performer_ids:
                 continue
 
-            msg = f"🖊 Пожалуйста, ознакомьтесь с распоряжением №{record_number}"
+            msg = (f"🖊 Пожалуйста, ознакомьтесь с распоряжением №{record_number}\n"
+                   f"https://airtable.com/appkzTDoZtJu777et/pagjAlnIQJHTPl2pE")
             code = send_telegram(tg_id, msg)
             if code == 200:
                 print(f"✅ {tg_id}: отправлено")

@@ -3,8 +3,8 @@ from handlers import register_blueprints
 from test import test_bp
 
 app = Flask(__name__)
-register_blueprints(app)
-app.register_blueprint(test_bp)
+# register_blueprints(app)
+# app.register_blueprint(test_bp)
 
 
 @app.route("/")

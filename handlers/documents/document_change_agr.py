@@ -12,17 +12,38 @@ def document_change_agreed():
     """
     Согласование введенных или измененных документов в Документы - Введение и изменения
     """
-    (temp_record_id, temp_record, temp_fields,
-     base_record_id, base_record, base_fields,
-     user_email) = get_records_by_transfer_id("Документы - Введение и изменения", booSame=True)
+    (
+        temp_record_id,
+        temp_record,
+        temp_fields,
+        base_record_id,
+        base_record,
+        base_fields,
+        user_email,
+    ) = get_records_by_transfer_id("Документы - Введение и изменения", booSame=True)
 
+    person_confirm(
+        "Документы - Введение и изменения",
+        temp_record_id,
+        base_record_id,
+        base_record,
+        "Согласовано - ID",
+        "Согласовано - Подписи",
+        "Согласовано - Дата",
+        user_email,
+        booSame=True,
+    )
 
-    person_confirm("Документы - Введение и изменения", temp_record_id, base_record_id, base_record,
-                   "Согласовано - ID", "Согласовано - Подписи",
-                   "Согласовано - Дата", user_email, booSame=True)
-
-    person_confirm("Документы - Введение и изменения", temp_record_id, base_record_id, base_record,
-                   "Утверждаю - ID", "Утверждаю - Подпись", "Утверждаю - Дата",
-                   user_email, booSame=True)
+    person_confirm(
+        "Документы - Введение и изменения",
+        temp_record_id,
+        base_record_id,
+        base_record,
+        "Утверждаю - ID",
+        "Утверждаю - Подпись",
+        "Утверждаю - Дата",
+        user_email,
+        booSame=True,
+    )
 
     return Response("✅ Подписано", status=200)

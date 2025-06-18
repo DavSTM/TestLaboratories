@@ -10,11 +10,17 @@ def document_activity():
     """
     Изменение статуса в Документы - Перечень в зависимости от действия в Документы - Активность
     """
-    (temp_record_id, temp_record, temp_fields,
-     base_record_id, base_record, base_fields,
-     user_email) = get_records_by_transfer_id("Документы - Активность", booSame=True)
+    (
+        temp_record_id,
+        temp_record,
+        temp_fields,
+        base_record_id,
+        base_record,
+        base_fields,
+        user_email,
+    ) = get_records_by_transfer_id("Документы - Активность", booSame=True)
 
-    has_permission = check_role(temp_record, ['R.02', 'R.17'])
+    has_permission = check_role(temp_record, ["R.02", "R.17"])
 
     if has_permission:
         activity_type = temp_fields.get("Вид активности")
@@ -22,9 +28,9 @@ def document_activity():
             'Перевод в "Актуальный" (Статус)': "Актуальный",
             'Статус в "Скоро истечет" (Статус)': "Скоро истечет",
             'Перевод в "Справочный" (Статус)': "Справочный",
-            'Сдача в архив (Статус)': "Архив",
-            'Уничтожение (Статус)': "Уничтожен",
-            'Приобрести (Статус)': "Приобрести"
+            "Сдача в архив (Статус)": "Архив",
+            "Уничтожение (Статус)": "Уничтожен",
+            "Приобрести (Статус)": "Приобрести",
         }
 
         fields = {

@@ -10,23 +10,26 @@ def document_update():
     """
     Обновление документов из _Документы - Перечень в Документы - Перечень
     """
-    (temp_record_id, temp_record, temp_fields,
-     base_record_id, base_record, base_fields,
-     user_email) = get_records_by_transfer_id(
-        "_Документы - Перечень", "Документы - Перечень")
+    (
+        temp_record_id,
+        temp_record,
+        temp_fields,
+        base_record_id,
+        base_record,
+        base_fields,
+        user_email,
+    ) = get_records_by_transfer_id("_Документы - Перечень", "Документы - Перечень")
 
-    has_permission_02 = check_role(temp_record, ['R.02'])
-    has_permission_17 = check_role(temp_record, ['R.17'])
+    has_permission_02 = check_role(temp_record, ["R.02"])
+    has_permission_17 = check_role(temp_record, ["R.17"])
     del_file = temp_fields.get("Удалить файлы")
     del_record = temp_fields.get("Delete")
 
-    if (has_permission_02
-            or (has_permission_17
-                and temp_fields.get("Лаборатория") != "All")):
+    if has_permission_02 or (
+        has_permission_17 and temp_fields.get("Лаборатория") != "All"
+    ):
         if del_record:
-            fields = {
-                "Status": "Deleted"
-            }
+            fields = {"Status": "Deleted"}
             update_record("Документы - Перечень", base_record.get("id"), fields)
             return Response("Запись в Документы - Перечень удалена", status=200)
 
@@ -54,7 +57,7 @@ def document_update():
             "Источник актуализации": temp_fields.get("Источник актуализации"),
             "Примечания": temp_fields.get("Примечания"),
             "Уровень доступа": temp_fields.get("Уровень доступа"),
-            "Ответственный за хранение": temp_fields.get("Ответственный за хранение")
+            "Ответственный за хранение": temp_fields.get("Ответственный за хранение"),
         }
 
         if del_file:

@@ -6,10 +6,7 @@ load_dotenv()
 
 API_KEY = os.environ.get("AIRTABLE_API_KEY")
 BASE_ID = os.environ.get("AIRTABLE_BASE_ID")
-HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json"
-}
+HEADERS = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
 
 
 def get_record(table, record_id):

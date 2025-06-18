@@ -119,6 +119,7 @@ def person_confirm(
             updated_fields[personnel_signs_dates] = (
                 ack_users_dates + f"{user_name} - {today_str}\n"
             )
+    print(ack_users)
     # Обновление записи
     if updated_fields:
         update_record(table=table, record_id=base_record_id, fields=updated_fields)
