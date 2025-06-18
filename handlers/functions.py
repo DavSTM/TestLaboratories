@@ -103,6 +103,7 @@ def person_confirm(
         person = get_record("Персонал - Перечень", person_id)
         if not person:
             continue
+
         person_fields = person.get("fields", {})
         if person_fields.get("Электронная почта") == created_by_user_email:
             user_obj = person_fields.get("User")
@@ -119,7 +120,7 @@ def person_confirm(
             updated_fields[personnel_signs_dates] = (
                 ack_users_dates + f"{user_name} - {today_str}\n"
             )
-    print(ack_users)
+
     # Обновление записи
     if updated_fields:
         update_record(table=table, record_id=base_record_id, fields=updated_fields)
