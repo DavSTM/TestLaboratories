@@ -25,17 +25,16 @@ def activity_from_documents():
     if has_permission and base_fields.get("Статус") == "Актуальный":
         fields = {
             "Лаборатория": base_fields.get("Лаборатория"),
-            "ID документа": [base_fields.get("id", "")],
+            "ID документа": [base_rec["id"]],
             "Дата": base_fields.get("Дата регистрации"),
             "Вид активности": "Актуализация",
             "Auto": True,  # Не дает сработать триггеру на установку
             # др. статусов в Документы - Активность
         }
 
-        create_record("Документы - Активность", fields)
-
+        create_record("Документы - Активность", fields=fields)
         fields["Вид активности"] = "Введение"
-        create_record("Документы - Активность", fields)
+        create_record("Документы - Активность", fields=fields)
 
         return Response("✅ Записи созданы", status=200)
     else:
